@@ -5,9 +5,12 @@ import json
 import matplotlib.pyplot as plt
 import io
 import base64
-
+#from apscheduler.schedulers.background import BackgroundScheduler - HAven't been able to get this to work. 
 # Import SQL Variables from SQL Query
-from sqlquery import *
+from sqlquery import get_sql
+
+# Get SQL Data on a scheduled job
+timestamps, datavals, demand = get_sql()
 
 #Define Flask App.
 app = Flask(__name__)
