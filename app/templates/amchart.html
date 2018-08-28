@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>IFN QCA</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Energy Markets Analytics</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="/">amChart</a></li>
+      <li><a href="/matplotlib">Matplotlib</a></li>
+    </ul>
+  </div>
+</nav>
+  
+<div class="container" style="width:100%" >
+    <h3>SA Price Forecast Dashboard Using amCharts!</h3>
+    <p>This plot requires using <a href="https://www.amcharts.com/">amCharts.</a></p><br>
+    <p>Flask handles the data from our SQL database into our HTML front end. amCharts requires the chart data to by in JSON format... i.e. '{"name":"John", "age":31, "city":"New York"}'</p> 
+    <div>
+    <div id="chartdiv">
+    </div>
+    <form method="POST">
+            <input name="text">
+            <input type="submit">
+            <p>{{ value }}</p>
+        </form>
+</div>
+</body>
+</html>
+
+<!-- Styles -->
+<style>
+    #chartdiv {
+        width	: 100%;
+        height	: 70vh;
+    }
+                                            
+</style>
+    
+
+<!-- Chart code -->
+<script>
+
+var data = {{ values | tojson}}
+console.log(data)
+var chart = AmCharts.makeChart("chartdiv", {
+    
+    "type": "serial",
+    "dataProvider": JSON.parse({{ values | tojson}}),
+    "theme": "light",
+    "marginRight": 40,
+    "marginLeft": 40,
+    "autoMarginOffset": 20,
+    "mouseWheelZoomEnabled":true,
+    "dataDateFormat": "YYYY-MM-DD JJ:NN",
+    "valueAxes": [{
+        "id": "v1",
+        "axisAlpha": 0,
+        "position": "left",
+        "ignoreAxisWidth":true
+    }],
+    "balloon": {
+        "borderThickness": 1,
+        "shadowAlpha": 0
+    },
+    "graphs": [{
+        "id": "g1",
+        "balloon":{
+            "drop":true,
+            "adjustBorderColor":false,
+            "color":"#ffffff"
+        },
+        "bullet": "round",
+        "bulletBorderAlpha": 1,
+        "bulletColor": "#FFFFFF",
+        "bulletSize": 5,
+        "hideBulletsCount": 50,
+        "lineThickness": 2,
+        "title": "SA Demand (MW)",
+        "useLineColorForBulletBorder": true,
+        "valueField": "value",
+        "balloonText": "<span style='font-size:18px;'>[[value]]</span>"
+    }],
+    "chartScrollbar": {
+        "graph": "g1",
+        "oppositeAxis":false,
+        "offset":30,
+        "scrollbarHeight": 80,
+        "backgroundAlpha": 0,
+        "selectedBackgroundAlpha": 0.1,
+        "selectedBackgroundColor": "#888888",
+        "graphFillAlpha": 0,
+        "graphLineAlpha": 0.5,
+        "selectedGraphFillAlpha": 0,
+        "selectedGraphLineAlpha": 1,
+        "autoGridCount":true,
+        "color":"#AAAAAA"
+    },
+    "chartCursor": {
+        "pan": true,
+        "valueLineEnabled": true,
+        "valueLineBalloonEnabled": true,
+        "cursorAlpha":1,
+        "cursorColor":"#258cbb",
+        "limitToGraph":"g1",
+        "valueLineAlpha":0.2,
+        "valueZoomable":true
+    },
+    "valueScrollbar":{
+        "oppositeAxis":false,
+        "offset":50,
+        "scrollbarHeight":10
+    },
+    "categoryField": "date",
+    "categoryAxis": {
+        "parseDates": true,
+        "minPeriod": "mm",
+    },
+    "export": {
+        "enabled": true
+    },
+    "legend": {
+        "useGraphSettings": true
+    }
+});
+
+chart.addListener("rendered", zoomChart);
+
+zoomChart();
+
+function zoomChart() {
+    chart.zoomToIndexes(chart.dataProvider.length - 40, chart.dataProvider.length - 1);
+}
+</script>
+    
