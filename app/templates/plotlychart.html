@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>IFN QCA</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Energy Markets Analytics</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="/">amChart</a></li>
+      <li><a href="/matplotlib">Matplotlib</a></li>
+      <li class="active"><a href="/plotly">Plotly</a></li>
+    </ul>
+  </div>
+</nav>
+  
+<div class="container" style="width:100%" >
+    <h3>SA Price Forecast Dashboard Using Plotly JS!</h3>
+    <p>This plot requires using Plotly's javascript library.</a></p><br>
+    <p>Plotly requires data in an array format. This is easy to pull from a python data frame i.e. timestamps = df['timestamps'].tolist()</p> 
+    <div>
+    <div class="chartdiv" id="myDiv"><!-- Plotly chart will be drawn inside this DIV --></div>
+
+</div>
+</body>
+</html>
+
+<!-- Styles -->
+<style>
+    .chartdiv {
+        width	: 100%;
+        height	: 70vh;
+    }
+                                            
+</style>
+    
+
+<!-- Chart code -->
+<script>
+var data = [
+  {
+    x: {{timesteps | tojson}},
+    y: {{values | tojson}},
+    type: 'scatter'
+  }
+];
+
+Plotly.newPlot('myDiv', data);
+</script>
+    

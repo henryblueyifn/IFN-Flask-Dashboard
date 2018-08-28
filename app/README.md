@@ -13,7 +13,4 @@ Go to your favorite web browser and open:
 ## Key Python Modules Used
 
 - Flask - web framework
-- Jinga2 - templating engine
-
-This application is written using Python 3.4.3.
 

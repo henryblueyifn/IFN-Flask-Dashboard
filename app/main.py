@@ -28,6 +28,12 @@ def my_form_post():
     processed_text = text.upper()
     return render_template('amchart.html',values=vals, value=processed_text)
 
+# Create a chart in plotly.js
+@app.route("/plotly")
+def plotlychart():
+    # Inject SQL Variables into our amChart HTML template
+    return render_template('plotlychart.html', timesteps=timestamps, values=demand)
+
 #Create a Matplotlib chart
 @app.route('/matplotlib')
 def build_plot():
@@ -40,5 +46,7 @@ def build_plot():
     plot_url = base64.b64encode(img.getvalue()).decode()
     return '<img src="data:image/png;base64,{}">'.format(plot_url)
 
+# Standard Flask step...
+# If this is the script which is executed then run. If it is imported don't run. 
 if __name__ == "__main__":
     app.run(debug=True)
